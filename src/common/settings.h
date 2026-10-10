@@ -512,7 +512,9 @@ struct Values {
 
     // Renderer
     SwitchableSetting<GraphicsAPI, true> graphics_api{
-#if defined(ENABLE_OPENGL)
+#if defined(ANDROID) && defined(ENABLE_VULKAN)
+        GraphicsAPI::Vulkan,
+#elif defined(ENABLE_OPENGL)
         GraphicsAPI::OpenGL,
 #elif defined(ENABLE_VULKAN)
         GraphicsAPI::Vulkan,

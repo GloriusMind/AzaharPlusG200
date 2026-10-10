@@ -10,6 +10,7 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.Locale
 import org.citra.citra_emu.R
 
 object DeviceCompatibility {
@@ -18,8 +19,10 @@ object DeviceCompatibility {
 
     fun isSupported(context: Context): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return false
-        if (Build.SOC_MANUFACTURER.uppercase() !in setOf("QUALCOMM", "QTI")) return false
-        if (Build.SOC_MODEL.filter(Char::isLetterOrDigit).uppercase() != "SM8350AC") {
+        if (Build.SOC_MANUFACTURER.uppercase(Locale.ROOT) !in setOf("QUALCOMM", "QTI")) {
+            return false
+        }
+        if (Build.SOC_MODEL.filter(Char::isLetterOrDigit).uppercase(Locale.ROOT) != "SM8350AC") {
             return false
         }
         if (Build.SUPPORTED_ABIS.none { it == "arm64-v8a" }) return false
@@ -27,14 +30,15 @@ object DeviceCompatibility {
         val memoryInfo = ActivityManager.MemoryInfo()
         (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
             .getMemoryInfo(memoryInfo)
-        val totalMemory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        val totalMemory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             memoryInfo.advertisedMem
         } else {
             memoryInfo.totalMem
         }
-        val minimumMemory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        val minimumMemory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             MIN_ADVERTISED_RAM_BYTES
         } else {
+            // Older Android versions report usable RAM after hardware-reserved memory.
             MIN_LEGACY_RAM_BYTES
         }
 

@@ -52,6 +52,7 @@ import org.citra.citra_emu.utils.BuildUtil
 import org.citra.citra_emu.utils.CitraDirectoryUtils
 import org.citra.citra_emu.utils.ControllerMappingHelper
 import org.citra.citra_emu.utils.DirectoryInitialization
+import org.citra.citra_emu.utils.DeviceCompatibility
 import org.citra.citra_emu.utils.EmulationLifecycleUtil
 import org.citra.citra_emu.utils.EmulationMenuSettings
 import org.citra.citra_emu.utils.FileBrowserHelper
@@ -104,6 +105,12 @@ class EmulationActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (!DeviceCompatibility.isSupported(this)) {
+            super.onCreate(null)
+            DeviceCompatibility.showUnsupportedDeviceDialog(this)
+            return
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         RefreshRateUtil.enforceRefreshRate(this, sixtyHz = true)

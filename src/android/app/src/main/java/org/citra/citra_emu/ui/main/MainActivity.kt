@@ -64,6 +64,7 @@ import org.citra.citra_emu.utils.CiaInstallWorker
 import org.citra.citra_emu.utils.CitraDirectoryHelper
 import org.citra.citra_emu.utils.CitraDirectoryUtils
 import org.citra.citra_emu.utils.DirectoryInitialization
+import org.citra.citra_emu.utils.DeviceCompatibility
 import org.citra.citra_emu.utils.FileBrowserHelper
 import org.citra.citra_emu.utils.FileUtil
 import org.citra.citra_emu.utils.InsetsHelper
@@ -109,6 +110,11 @@ class MainActivity :
         ThemeUtil.themeChangeListener(this)
         ThemeUtil.setTheme(this)
         super.onCreate(savedInstanceState)
+        if (!DeviceCompatibility.isSupported(this)) {
+            DeviceCompatibility.showUnsupportedDeviceDialog(this)
+            return
+        }
+
         NativeLibrary.initMultiplayer()
 
         binding = ActivityMainBinding.inflate(layoutInflater)

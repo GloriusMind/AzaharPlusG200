@@ -531,8 +531,13 @@ struct Values {
     Setting<bool> pica_debugging{false, Keys::pica_debugging};
     Setting<bool> dump_command_buffers{false, Keys::dump_command_buffers};
     SwitchableSetting<bool> spirv_shader_gen{true, Keys::spirv_shader_gen};
+#ifdef ANDROID
+    SwitchableSetting<bool> disable_spirv_optimizer{false, Keys::disable_spirv_optimizer};
+    SwitchableSetting<bool> async_shader_compilation{true, Keys::async_shader_compilation};
+#else
     SwitchableSetting<bool> disable_spirv_optimizer{true, Keys::disable_spirv_optimizer};
     SwitchableSetting<bool> async_shader_compilation{false, Keys::async_shader_compilation};
+#endif
     SwitchableSetting<bool> async_presentation{true, Keys::async_presentation};
     SwitchableSetting<bool> use_hw_shader{true, Keys::use_hw_shader};
     SwitchableSetting<bool> use_disk_shader_cache{true, Keys::use_disk_shader_cache};

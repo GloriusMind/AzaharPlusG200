@@ -16,13 +16,18 @@ import org.citra.citra_emu.R
 object DeviceCompatibility {
     private const val MIN_ADVERTISED_RAM_BYTES = 8_000_000_000L
     private const val MIN_LEGACY_RAM_BYTES = 7_000_000_000L
+    private val SUPPORTED_SOC_MANUFACTURERS =
+        setOf("QUALCOMM", "QUALCOMMTECHNOLOGIESINC", "QTI")
 
     fun isSupported(context: Context): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return false
-        if (Build.SOC_MANUFACTURER.uppercase(Locale.ROOT) !in setOf("QUALCOMM", "QTI")) {
+        val manufacturer = Build.SOC_MANUFACTURER.filter(Char::isLetterOrDigit)
+            .uppercase(Locale.ROOT)
+        if (manufacturer !in SUPPORTED_SOC_MANUFACTURERS) {
             return false
         }
-        if (Build.SOC_MODEL.filter(Char::isLetterOrDigit).uppercase(Locale.ROOT) != "SM8350AC") {
+        val socModel = Build.SOC_MODEL.filter(Char::isLetterOrDigit).uppercase(Locale.ROOT)
+        if (socModel != "SM8350AC") {
             return false
         }
         if (Build.SUPPORTED_ABIS.none { it == "arm64-v8a" }) return false

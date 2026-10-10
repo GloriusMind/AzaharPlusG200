@@ -15,7 +15,7 @@ import org.citra.citra_emu.R
 
 object DeviceCompatibility {
     private const val MIN_ADVERTISED_RAM_BYTES = 8_000_000_000L
-    private const val MIN_LEGACY_RAM_BYTES = 7_000_000_000L
+    private const val MIN_LEGACY_RAM_BYTES = 6_500_000_000L
     private val SUPPORTED_SOC_MANUFACTURERS =
         setOf("QUALCOMM", "QUALCOMMTECHNOLOGIESINC", "QTI")
 
